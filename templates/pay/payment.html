@@ -1,0 +1,11 @@
+<h2>Payment for Order #{{ order.id }}</h2>
+<form method="post" action="">
+    {% csrf_token %}
+    <label for="payment_method">Payment Method:</label>
+    <select name="payment_method">
+        <option value="credit_card">Credit Card</option>
+        <option value="paypal">PayPal</option>
+        <option value="bank_transfer">Bank Transfer</option>
+    </select>
+    <button type="submit">Pay Now</button>
+</form>

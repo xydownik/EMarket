@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-c(1(!@1swxo5b1go9pg!)&_y0h6e5(%017m)baho)z$bekmz6+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'True'
+DEBUG  = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -104,31 +103,29 @@ WSGI_APPLICATION = 'market.wsgi.application'
 DATABASES = {
     'cassandra': {
         'ENGINE': 'django_cassandra_engine',
-        'NAME': os.getenv('CASSANDRA_KEYSPACE', 'my_keyspace'),
-        'HOST': os.getenv('CASSANDRA_HOST', '127.0.0.1'),
+        'NAME': 'my_keyspace',
+        'HOST': 'cassandra',
+        'PORT': 9042,
         'OPTIONS': {
-            'port': int(os.getenv('CASSANDRA_PORT', '9042')),
-            'replication': {
-                'strategy_class': 'SimpleStrategy',
-                'replication_factor': os.getenv('CASSANDRA_REPLICATION_FACTOR', '1'),
-            },
+            'replication_factor': 3,
+            'consistency_level': 'LOCAL_QUORUM',
         },
     },
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'new_db'),
-        'USER': os.getenv('POSTGRES_USER', 'admin'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'admin'),
-        'HOST': os.getenv('POSTGRES_HOST', '127.0.0.1'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        'NAME': 'new_db',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+        'HOST': 'postgres',
+        'PORT': '5432',
     },
     'replica2': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB2', 'db_replica2'),
-        'USER': os.getenv('POSTGRES_USER', 'admin'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'admin'),
-        'HOST': os.getenv('POSTGRES_HOST', '127.0.0.1'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        'NAME': 'db_replica2',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+        'HOST': 'postgres',
+        'PORT': '5432',
     }
 }
 

@@ -34,6 +34,7 @@ jobs:
       - name: Run tests
         run: |
           pytest --cov=.
+
   deploy:
     runs-on: ubuntu-latest
     needs: build

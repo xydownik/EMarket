@@ -21,4 +21,4 @@ COPY . .
 # Expose ports for Gunicorn and Cassandra
 EXPOSE 8000 8001 8002 8003
 # Set Gunicorn as the default command
-CMD ["gunicorn", "0.0.0.0:8000", "market.wsgi:application"]
+CMD ["gunicorn","--workers 4", "market.wsgi:application", "--bind 0.0.0.0:8000"]

@@ -30,7 +30,7 @@ jobs:
         run: |
           docker-compose up -d
           docker-compose exec -T cassandra cqlsh -e "SELECT release_version FROM system.local"
-          docker-compose exec -T db psql -U new_db -c "SELECT 1"
+          docker-compose exec -T postgres psql -U new_db -c "SELECT 1"
       - name: Run tests
         run: |
           pytest --cov=.

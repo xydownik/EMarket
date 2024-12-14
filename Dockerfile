@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl && \
     rm -rf /var/lib/apt/lists/*
-## Install Cassandra dependencies
-#RUN pip install cassandra-driver
+# Install Cassandra dependencies
+RUN pip install cassandra-driver
 # Copy requirements file and install Python dependencies
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt

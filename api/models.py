@@ -40,8 +40,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         indexes = [
-            models.Index(fields=['email']),  # Indexing email for faster lookups
-            models.Index(fields=['username']),  # Indexing username for faster lookups
+            models.Index(fields=['email']),
+            models.Index(fields=['username']),
         ]
 
 class Category(models.Model):
@@ -73,9 +73,9 @@ class Product(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['name']),  # Indexing product name for faster search
-            models.Index(fields=['category_id']),  # Indexing category_id for filtering
-            models.Index(fields=['price']),  # Indexing price for filtering or sorting
+            models.Index(fields=['name']),
+            models.Index(fields=['category_id']),
+            models.Index(fields=['price']),
         ]
 
 class Order(models.Model):
@@ -90,8 +90,8 @@ class Order(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['user_id']),  # Indexing user_id for filtering
-            models.Index(fields=['order_status']),  # Indexing order status for faster lookups
+            models.Index(fields=['user_id']),
+            models.Index(fields=['order_status']),
         ]
 
 class OrderItem(models.Model):
@@ -120,7 +120,7 @@ class ShoppingCart(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['user_id']),  # Indexing user_id for filtering
+            models.Index(fields=['user_id']),
         ]
 
 class CartItem(models.Model):
@@ -135,7 +135,7 @@ class CartItem(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['cart_id', 'product_id']),  # Composite index for fast lookups
+            models.Index(fields=['cart_id', 'product_id']),
         ]
 
 
@@ -152,9 +152,9 @@ class Review(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['product_id']),  # Indexing product_id for filtering reviews by product
-            models.Index(fields=['user_id']),  # Indexing user_id for filtering reviews by user
-            models.Index(fields=['rating']),  # Indexing rating for fast lookups
+            models.Index(fields=['product_id']),
+            models.Index(fields=['user_id']),
+            models.Index(fields=['rating']),
         ]
 
 class Wishlist(models.Model):
@@ -167,7 +167,7 @@ class Wishlist(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['user_id']),  # Indexing user_id for filtering by user
+            models.Index(fields=['user_id']),
         ]
 
 class WishlistItem(models.Model):
@@ -180,5 +180,5 @@ class WishlistItem(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['wishlist_id', 'product_id']),  # Composite index for fast lookups
+            models.Index(fields=['wishlist_id', 'product_id']),
         ]

@@ -30,8 +30,7 @@ class CustomUserViewSet(ModelViewSet):
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.prefetch_related('product_set')
     serializer_class = CategorySerializer
-
-# @method_decorator(cache_page(CACHE_TIMEOUT), name='dispatch')
+    permission_classes = [IsAuthenticated]
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.select_related('category_id')
     serializer_class = ProductSerializer

@@ -1,22 +1,99 @@
-# Database Optimization in Django
+# Database Optimization Strategies
 
-Database optimization is crucial for improving the performance and scalability of Django applications. In this document, we will focus on three key areas of optimization: **ORM Optimization**, **Caching**, and **Indexing**. Each of these techniques plays an important role in improving query speed and reducing database load.
+## Introduction  
+This document outlines the strategies and techniques used to optimize the PostgreSQL database for the project. The optimizations aim to ensure efficient data storage, fast query execution, and scalability.  
 
-## 1. ORM Optimization
+---
 
-The Django ORM (Object-Relational Mapping) provides a powerful and intuitive way to interact with the database. However, if not used carefully, it can lead to inefficient queries. Below are some strategies to optimize the ORM queries:
+## 1. **Normalization and Schema Design**  
 
-### 1.1 Use `select_related()` and `prefetch_related()`
+### Normalized Schema  
+- The database schema follows **3rd Normal Form (3NF)** to eliminate redundancy and ensure data integrity.  
+- Entities such as `users`, `categories`, `products`, `orders`, `order_items`, `shopping_carts`, and others are normalized to have primary and foreign keys that minimize duplication.  
 
-- **`select_related()`**: Use this for single-valued relationships (ForeignKey, OneToOne) to perform a JOIN and fetch related objects in a single query. It reduces the number of queries when accessing related objects.
-  
-- **`prefetch_related()`**: Use this for multi-valued relationships (ManyToMany, reverse ForeignKey) to execute a separate query for each relationship and then combine them efficiently in Python.
+### Primary and Foreign Keys  
+- **Primary Keys**: Uniquely identify each record in tables (e.g., `id` in `users`, `categories`).  
+- **Foreign Keys**: Establish relationships between tables (e.g., `category_id` in `products` references `categories`).  
 
-#### Example:
+---
+
+## 2. **Indexing**  
+
+### Primary and Unique Indexes  
+- Automatically created for primary keys and unique constraints.  
+
+### Additional Indexing  
+1. **Foreign Keys**  
+   - Indexed foreign keys (e.g., `category_id` in `products`, `user_id` in `orders`) to speed up JOIN operations.  
+
+2. **Frequently Queried Columns**  
+   - Created indexes for fields often used in search or filtering:
+     - `name` in `products` (e.g., for product search).  
+     - `email` in `users` (e.g., for user login).  
+     - `created_at` in `orders` (e.g., for recent order queries).  
+
+3. **Composite Indexes**  
+   - Created composite indexes where multiple columns are frequently queried together:
+     - `(user_id, product_id)` in `reviews` to optimize review lookups for specific users and products.  
+
+---
+
+## 3. **Query Optimization**  
+
+### Optimized SQL Queries  
+1. **Use of SELECT**  
+   - Avoid `SELECT *` and only retrieve required columns to minimize data transfer and processing overhead.  
+
+2. **JOIN Operations**  
+   - Optimized JOINs by indexing related columns (e.g., `user_id`, `category_id`).  
+   - Ensured proper use of INNER JOIN or LEFT JOIN based on requirements to reduce unnecessary processing.
+
+3. **Prepared Statements**  
+   - Used prepared statements for frequent queries to leverage query plan caching.  
+
+---
+
+## 4. **Vacuuming and Analyzing**  
+
+- Enabled **autovacuum** to keep statistics up-to-date and prevent table bloat.  
+- Scheduled periodic `VACUUM` and `ANALYZE` commands to optimize query planning and performance.  
+
+---
+
+## 5. **Caching**  
+
+- Used a query caching mechanism (e.g., Redis) for frequently accessed data, such as product details or category lists.  
+- Reduced database load by implementing cache expiration strategies.  
+
+---
+
+## 6. **Monitoring and Profiling**  
+
+1. **Query Profiling**  
+   - Used PostgreSQL's `EXPLAIN` and `EXPLAIN ANALYZE` to understand query execution plans and identify bottlenecks.  
+
+2. **Performance Monitoring**  
+   - Monitored database performance using tools such as **pg_stat_statements** and application-level logging for slow queries.  
+
+---
+
+## 7. **Scalability and Maintenance**  
+
+### Partitioning  
+- Used table partitioning for large tables such as `orders` and `order_items` based on `created_at` to improve query performance for time-based queries.  
+
+### Connection Pooling  
+- Configured connection pooling using tools like **PgBouncer** to manage concurrent connections efficiently.  
+
+---
+
+## Example Optimized Query  
+
+Here is an example of a common query for fetching product details with its associated category:  
 
 ```python
-# select_related - for ForeignKey or OneToOne relations
-products = Product.objects.select_related('category').all()
+queryset = Review.objects.select_related('product_id', 'user_id')
+queryset = CartItem.objects.select_related('cart_id', 'product_id')
+queryset = OrderItem.objects.select_related('order_id', 'product_id')
 
-# prefetch_related - for ManyToMany or reverse ForeignKey relations
-categories = Category.objects.prefetch_related('product_set').all()
+```

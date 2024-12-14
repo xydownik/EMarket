@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'payments',
     'cassandra',
     'django_cassandra_engine',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -104,7 +105,7 @@ DATABASES = {
     'cassandra': {
         'ENGINE': 'django_cassandra_engine',
         'NAME': 'my_keyspace',
-        'HOST': 'cassandra',
+        'HOST': 'localhost',
         'PORT': 9042,
         'OPTIONS': {
             'replication_factor': 3,
@@ -116,7 +117,7 @@ DATABASES = {
         'NAME': 'new_db',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 'postgres',
+        'HOST': 'localhost',
         'PORT': '5432',
     },
     'replica2': {
@@ -124,7 +125,7 @@ DATABASES = {
         'NAME': 'db_replica2',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 'postgres',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -281,15 +282,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 
-# CASSANDRA_CONNECTION = {
-#     'default': {
-#         'ENGINE': 'django_cassandra_engine',
-#         'NAME': 'my_keyspace',
-#         'HOST': '127.0.0.1',
-#         'PORT': '9042',
-#          'OPTIONS': {
-#             'replication_factor': 3,
-#             'consistency_level': 'LOCAL_QUORUM',
-#         }
-#     }
-# }
+CASSANDRA_CLUSTER = {
+    'CONTACT_POINTS': ['cassandra-1'],  # The name of the Cassandra container or IP address
+    'PORT': 9042,
+    'KEYSPACE': 'my_keyspace',
+    'CONSISTENCY_LEVEL': 'LOCAL_ONE',  # Adjust if necessary
+    'TIMEOUT': 10,
+}

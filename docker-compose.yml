@@ -57,12 +57,8 @@ services:
       - cassandradata:/var/lib/cassandra
     networks:
       - app_network
-    expose:
-      - "7000"
-      - "7001"
-      - "7199"
+    ports:
       - "9042"
-      - "9160"
     ulimits:
       memlock:
         soft: -1

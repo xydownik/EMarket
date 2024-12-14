@@ -51,14 +51,17 @@ from django.contrib.auth.hashers import make_password
 # Hash the password before saving it to the database
 hashed_password = make_password(user_password)
 ```
-## JWT Authentication
+
+### JWT Authentication
+
 Instead of using traditional sessions (which can be prone to session hijacking), we use JWT (JSON Web Tokens) for secure stateless authentication. JWT allows the user to authenticate via a token that can be used to verify their identity for subsequent requests without the need to maintain a server-side session.
 
-### Example implementation:
+#### Example implementation:
 
 ```python
 import jwt
 from datetime import datetime, timedelta
+from django.conf import settings
 
 def generate_jwt(user):
     payload = {
@@ -70,10 +73,12 @@ def generate_jwt(user):
 # Example usage in login view
 token = generate_jwt(user)
 ```
-## Brute Force Protection
+
+### Brute Force Protection
+
 To prevent brute-force attacks, rate limiting should be applied to the login endpoint. For example, the number of login attempts per IP address or user should be limited within a specific time frame (e.g., 5 attempts in 10 minutes).
 
-### Example using Django Ratelimit middleware:
+#### Example using Django Ratelimit middleware:
 
 ```python
 from django_ratelimit.decorators import ratelimit
@@ -83,12 +88,14 @@ def login_view(request):
     # login logic here
     pass
 ```
-## Rate Limiting
+
+### Rate Limiting
+
 Rate limiting is essential to prevent abuse of the login and registration endpoints. This ensures that attackers cannot flood the server with requests and potentially overload the system.
 
 Rate limiting can be done using tools like Django Ratelimit, which allows you to limit the number of requests that can be made to any specific view.
 
-### Example using Django Ratelimit:
+#### Example using Django Ratelimit:
 
 ```python
 from django_ratelimit.decorators import ratelimit
@@ -98,7 +105,9 @@ def register_view(request):
     # registration logic here
     pass
 ```
-## CSRF Protection
+
+### CSRF Protection
+
 Cross-Site Request Forgery (CSRF) is a common vulnerability in web applications. To prevent this, we need to ensure that a CSRF token is used in all state-changing requests (such as login or registration) to confirm that the request is coming from the authenticated user.
 
 In Django, CSRF protection is enabled by default for all POST requests.
@@ -110,14 +119,19 @@ MIDDLEWARE = [
     # other middleware...
 ]
 ```
-## Secure HTTP Headers
+
+### Secure HTTP Headers
+
 To enhance the security of the application, we must ensure that secure HTTP headers are set for all responses. This can be done by setting headers like:
 
-Strict-Transport-Security (HSTS): Forces the browser to always use HTTPS.
-Content-Security-Policy: Prevents certain types of attacks like XSS.
-X-Content-Type-Options: Prevents MIME-type sniffing.
+- **Strict-Transport-Security (HSTS)**: Forces the browser to always use HTTPS.
+- **Content-Security-Policy**: Prevents certain types of attacks like XSS.
+- **X-Content-Type-Options**: Prevents MIME-type sniffing.
+
+#### Example in middleware:
+
 ```python
-# Example in middleware.py
+# middleware.py
 from django.utils.deprecation import MiddlewareMixin
 
 class SecureHeadersMiddleware(MiddlewareMixin):
@@ -126,7 +140,9 @@ class SecureHeadersMiddleware(MiddlewareMixin):
         response['X-Content-Type-Options'] = 'nosniff'
         return response
 ```
-## Input Validation
+
+### Input Validation
+
 All user inputs (such as username, email, and password) should be validated and sanitized to prevent injection attacks, including SQL injection and XSS attacks.
 
 Django provides robust validation features out of the box for form handling. Additionally, any data coming from external sources should be sanitized before being processed.
@@ -138,8 +154,11 @@ def validate_password(password):
     if len(password) < 8:
         raise ValidationError("Password must be at least 8 characters long")
 ```
+
 ## Implementation in Django
+
 ### Middleware
+
 To enforce security measures globally, we will add the necessary middleware in middleware.py:
 
 ```python
@@ -154,7 +173,9 @@ class SecureHeadersMiddleware(MiddlewareMixin):
         response['Content-Security-Policy'] = "default-src 'self'"
         return response
 ```
-## Login and Register Views
+
+### Login and Register Views
+
 For secure login and registration, we will use Django’s authentication system and apply the security measures as shown:
 
 ```python
@@ -167,15 +188,27 @@ from rest_framework import status
 
 @api_view(['POST'])
 def login_view(request):
-    # Perform validation, user authentication, and token generation
-    pass
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(username=username, password=password)
+    if user:
+        token = generate_jwt(user)
+        return Response({'token': token}, status=status.HTTP_200_OK)
+    return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
 def register_view(request):
-    # Perform validation, user registration, and secure password hashing
-    pass
+    username = request.data.get('username')
+    password = request.data.get('password')
+    if User.objects.filter(username=username).exists():
+        return Response({'error': 'User already exists'}, status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.create(username=username, password=make_password(password))
+    return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
 ```
+
 ## Conclusion
+
 Implementing security for user authentication is critical to prevent unauthorized access and protect sensitive user data. By following these best practices and utilizing middleware and Django's built-in features, you can ensure that the login and registration endpoints are secure and resistant to common security threats.
 
 The measures outlined in this document, including password hashing, rate limiting, CSRF protection, and secure headers, will significantly enhance the security posture of your application.
+

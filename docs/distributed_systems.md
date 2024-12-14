@@ -51,16 +51,18 @@ pip install django-cassandra-engine
 In your settings.py:
 
 ```python
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django_cassandra_engine.models',
-        'NAME': 'your_cassandra_keyspace',
-        'HOST': 'your_cassandra_host',
+    'cassandra': {
+        'ENGINE': 'django_cassandra_engine',
+        'NAME': 'my_keyspace',
+        'HOST': 'localhost',
         'PORT': 9042,
-        'USER': 'your_cassandra_user',
-        'PASSWORD': 'your_cassandra_password',
-    }
-}
+        'OPTIONS': {
+            'replication_factor': 3,
+            'consistency_level': 'LOCAL_QUORUM',
+        },
+    },
 ```
 ## Models in Cassandra
 Cassandra stores data in tables, but without the need for joins or complex relationships. You can define a simple schema for storing payment transactions, for example:

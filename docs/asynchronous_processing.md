@@ -40,17 +40,17 @@ The `process_payment` task handles the payment processing asynchronously. Once a
 @shared_task
 def process_payment(payment_id):
     try:
-        # Access Cassandra settings directly from Django's settings
+        
         cassandra_settings = settings.DATABASES['cassandra']
         host = cassandra_settings['HOST']
         port = cassandra_settings['PORT']
         keyspace = cassandra_settings['NAME']
 
-        # Manually connect to Cassandra using the settings
+       
         cluster = Cluster([host], port=port)
         session = cluster.connect(keyspace)
 
-        # Retrieve the payment from Cassandra database
+       
         payment = Payment.objects.using('my_keyspace').get(id=payment_id)
         payment.status = "Completed"
         payment.save()
@@ -93,20 +93,17 @@ This view retrieves the cart from the session, calculates the total amount, and 
 ```python
 @login_required
 def view_order(request):
-    # Get the cart from the session
+  
     cart = request.session.get('cart', {})
 
-    # Calculate total amount
     total_amount = sum(item['price'] * item['quantity'] for item in cart.values())
 
-    # Create a new order
     order = Order.objects.create(
         user_id=request.user,
         total_amount=total_amount,
-        order_status="Pending"  # Default order status
+        order_status="Pending"  
     )
 
-    # Add items to the order
     for product_id, item in cart.items():
         product = get_object_or_404(Product, id=product_id)
         OrderItem.objects.create(
@@ -116,7 +113,6 @@ def view_order(request):
             price=item['price']
         )
 
-    # Show order review page
     return render(request, 'pay/order_review.html', {'order': order, 'total_amount': total_amount})
 ```
 This view is responsible for presenting the user with an order review page before proceeding to payment.
@@ -127,13 +123,13 @@ This view handles the payment process. After the user submits the payment form, 
 ```python
 @login_required
 def pay_order(request, order_id):
-    # Get the order
+   
     order = get_object_or_404(Order, id=order_id, user_id=request.user)
     order_uuid = uuid.uuid5(uuid.NAMESPACE_DNS, str(order.id))
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
-            # Create a payment record
+           
             payment = Payment.objects.using('my_keyspace').create(
                 order_id=order_uuid,
                 payment_method=form.cleaned_data['payment_method'],
@@ -143,7 +139,7 @@ def pay_order(request, order_id):
 
             payment.save()
             order.status = "Completed"
-            # Trigger background tasks for payment processing and email confirmation
+           
             process_payment.delay(payment.id)
             send_order_confirmation_email.delay(order.id)
 

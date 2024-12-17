@@ -26,10 +26,9 @@ jobs:
       - name: Start services
         run: |
           docker-compose up -d
-      - name: Wait for Cassandra to be ready
+      - name: Wait for Postgres to be ready
         run: |
           docker-compose up -d
-          docker-compose exec -T cassandra cqlsh -e "SELECT release_version FROM system.local"
           docker-compose exec -T postgres psql -U new_db -c "SELECT 1"
       - name: Run tests
         run: |

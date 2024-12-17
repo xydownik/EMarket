@@ -102,16 +102,6 @@ WSGI_APPLICATION = 'market.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'cassandra': {
-        'ENGINE': 'django_cassandra_engine',
-        'NAME': 'my_keyspace',
-        'HOST': 'localhost',
-        'PORT': 9042,
-        'OPTIONS': {
-            'replication_factor': 3,
-            'consistency_level': 'LOCAL_QUORUM',
-        },
-    },
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'new_db',
@@ -122,7 +112,7 @@ DATABASES = {
     },
     'replica2': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'db_replica2',
+        'NAME': 'new_db',
         'USER': 'admin',
         'PASSWORD': 'admin',
         'HOST': 'localhost',

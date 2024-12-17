@@ -44,13 +44,12 @@ def view_order(request):
 def pay_order(request, order_id):
     # Получаем заказ
     order = get_object_or_404(Order, id=order_id, user_id=request.user)
-    order_uuid = uuid.uuid5(uuid.NAMESPACE_DNS, str(order.id))
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
             # Создаём запись платежа
-            payment = Payment.objects.using('my_keyspace').create(
-                order_id=order_uuid,
+            payment = Payment.objects.create(
+                order_id=order,
                 payment_method=form.cleaned_data['payment_method'],
                 amount=order.total_amount,
                 status="Pending"

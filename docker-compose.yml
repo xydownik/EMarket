@@ -24,14 +24,6 @@ services:
       DJANGO_SETTINGS_MODULE: market.settings
     depends_on:
       - postgres
-      - cassandra
-    entrypoint: >
-      /bin/sh -c "
-      /wait-for-it.sh cassandra:9042 --timeout=60 --strict &&
-      /wait-for-it.sh postgres:5432 --timeout=60 --strict &&
-      gunicorn market.wsgi:application --bind 0.0.0.0:8000
-      "
-
     networks:
       - app_network
 
@@ -45,24 +37,6 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - app_network
-
-  cassandra:
-    image: cassandra:4
-    environment:
-      CASSANDRA_CLUSTER_NAME: "Test Cluster"
-      CASSANDRA_LISTEN_ADDRESS: cassandra
-      CASSANDRA_BROADCAST_ADDRESS: cassandra
-      CASSANDRA_SEEDS: cassandra
-    volumes:
-      - cassandradata:/var/lib/cassandra
-    networks:
-      - app_network
-    ports:
-      - "9042"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
 
   prometheus:
     image: prom/prometheus:latest
@@ -90,7 +64,6 @@ services:
 
 volumes:
   pgdata:
-  cassandradata:
   grafana-data:
 
 networks:

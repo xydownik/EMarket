@@ -16,6 +16,7 @@ django-cassandra-engine==1.9.0
 django-celery-beat==2.7.0
 django-celery-results==2.5.1
 django-debug-toolbar==4.4.6
+django-extensions==3.2.3
 django-prometheus==2.3.1
 django-ratelimit==4.1.0
 django-redis==5.4.0

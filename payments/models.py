@@ -1,15 +1,14 @@
-from cassandra.cqlengine.models import Model
-from cassandra.cqlengine.columns import UUID, Decimal, Text, DateTime
-import uuid
-from datetime import datetime
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db import models
+from django.utils.timezone import now
 
-class Payment(Model):
-    __table_name__ = 'payment'
+from api.models import Order
 
-    id = UUID(primary_key=True, default=uuid.uuid4)
-    order_id = UUID(index=True)  # Secondary index for order_id
-    payment_method = Text()
-    amount = Decimal()
-    status = Text(index=True)  # Secondary index for status
-    created_at = DateTime(default=datetime.now)
-    updated_at = DateTime(default=datetime.now)
+
+class Payment(models.Model):
+    order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
+    payment_method= models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=0)
+    status = models.CharField(max_length=255)
+    created_at = models.DateTimeField(default=now)
+    updated_at = models.DateTimeField(auto_now=True)

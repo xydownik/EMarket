@@ -92,7 +92,7 @@ class CartItemViewSet(ModelViewSet):
 
 @method_decorator(cache_page(CACHE_TIMEOUT), name='dispatch')
 class PaymentViewSet(ModelViewSet):
-    queryset = Payment.objects.using('my_keyspace').all()
+    queryset = Payment.objects.using('default').all()
     serializer_class = PaymentSerializer
 
 @method_decorator(cache_page(CACHE_TIMEOUT), name='dispatch')

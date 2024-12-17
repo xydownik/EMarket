@@ -22,8 +22,10 @@ services:
       - .:/app
     environment:
       DJANGO_SETTINGS_MODULE: market.settings
+      CELERY_BROKER_URL: redis://redis:6379/0  # Add Celery broker URL
     depends_on:
       - postgres
+      - redis
     networks:
       - app_network
 
@@ -38,6 +40,27 @@ services:
     networks:
       - app_network
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A market worker --loglevel=info  # Start Celery worker
+    environment:
+      DJANGO_SETTINGS_MODULE: market.settings
+      CELERY_BROKER_URL: redis://redis:6379/0  # Use Redis as broker
+    depends_on:
+      - redis
+    networks:
+      - app_network
+
   prometheus:
     image: prom/prometheus:latest
     ports:
@@ -46,7 +69,6 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - app_network
-
 
   grafana:
     image: grafana/grafana:latest

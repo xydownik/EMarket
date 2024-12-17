@@ -26,7 +26,6 @@ jobs:
       - name: Start services
         run: |
           docker-compose up -d
-
       - name: Run tests
         run: |
           pytest --cov=.

@@ -107,7 +107,7 @@ DATABASES = {
         'NAME': 'new_db',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': 'postgres',
         'PORT': '5432',
     },
     'replica2': {
@@ -115,7 +115,7 @@ DATABASES = {
         'NAME': 'new_db',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }

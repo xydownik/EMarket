@@ -26,10 +26,7 @@ jobs:
       - name: Start services
         run: |
           docker-compose up -d
-      - name: Wait for Postgres to be ready
-        run: |
-          docker-compose up -d
-          docker-compose exec -T postgres psql -U new_db -c "SELECT 1"
+
       - name: Run tests
         run: |
           pytest --cov=.

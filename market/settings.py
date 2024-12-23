@@ -109,7 +109,9 @@ DATABASES = {
     'replica2': dj_database_url.parse(os.getenv('DATABASE_URL', 'postgresql://admin:BrvyFl9xGKVPb7XGQIncAB6SmNJZjUXe@dpg-cte3u4rtq21c73813qdg-a.oregon-postgres.render.com/new_db_fhwf'))
 }
 
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 

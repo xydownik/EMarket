@@ -13,7 +13,12 @@ User = get_user_model()
 class UserAuthenticationTests(TestCase):
     databases = {'default', 'replica2'}
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', email= 'test@gmail.com', password='testpass', first_name='firstname', last_name='lastname')
+        self.user = User.objects.create_user(
+            username='testuser',
+            email= 'test@gmail.com',
+            password='testpass',
+            first_name='firstname',
+            last_name='lastname')
 
     def test_user_login_valid(self):
         """Test logging in with valid credentials"""
@@ -27,4 +32,10 @@ class UserAuthenticationTests(TestCase):
 
     def test_user_creation(self):
         """Test creating a user"""
-        user = User.objects.create_user(username='newuser', email= 'new@gmail.com', password='newpass', first_name='newfirstname', last_name='newlastname')
+        user = User.objects.create_user(
+            username='newuser',
+            email= 'new@gmail.com',
+            password='newpass',
+            first_name='newfirstname',
+            last_name='newlastname')
+        self.assertEqual(user.email, 'new@gmail.com')

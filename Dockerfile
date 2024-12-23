@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose ports for Gunicorn and Cassandra
-EXPOSE 8000 8001 8002 8003
+EXPOSE 8000
 
 # Set Gunicorn as the default command
 CMD ["gunicorn", "market.wsgi:application", "--workers", "4", "--bind", "0.0.0.0:8000"]

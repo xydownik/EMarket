@@ -11,6 +11,8 @@ click-plugins==1.1.1
 click-repl==0.3.0
 coverage==7.6.1
 cron-descriptor==1.4.5
+dj-config-url==0.1.1
+dj-database-url==2.3.0
 Django==4.2.13
 django-cassandra-engine==1.9.0
 django-celery-beat==2.7.0

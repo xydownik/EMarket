@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -102,22 +104,9 @@ WSGI_APPLICATION = 'market.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'new_db',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'postgres',
-        'PORT': '5432',
-    },
-    'replica2': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'new_db',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'postgres',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.parse(os.getenv('DATABASE_URL', 'postgresql://admin:BrvyFl9xGKVPb7XGQIncAB6SmNJZjUXe@dpg-cte3u4rtq21c73813qdg-a.oregon-postgres.render.com/new_db_fhwf')),
+
+    'replica2': dj_database_url.parse(os.getenv('DATABASE_URL', 'postgresql://admin:BrvyFl9xGKVPb7XGQIncAB6SmNJZjUXe@dpg-cte3u4rtq21c73813qdg-a.oregon-postgres.render.com/new_db_fhwf'))
 }
 
 
@@ -259,7 +248,7 @@ LOGGING = {
     },
 }
 
-CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ broker URL
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0') # RabbitMQ broker URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 

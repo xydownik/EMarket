@@ -58,7 +58,6 @@ def pay_order(request, order_id):
             payment.save()
             order.status = "Completed"
             order.save()
-            # Запуск фоновых задач для обработки платежа и отправки письма
             process_payment.delay(payment.id)
             send_order_confirmation_email.delay(order.id)
 

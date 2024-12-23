@@ -32,6 +32,9 @@ jobs:
       - name: Start services
         run: |
           docker-compose up -d
+      - name: Run migrations
+        run: |
+          docker-compose run django_app python manage.py migrate
       - name: Run tests
         run: |
           pytest --cov=.

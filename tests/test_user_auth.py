@@ -22,7 +22,7 @@ class UserAuthenticationTests(TestCase):
 
     def test_user_login_valid(self):
         """Test logging in with valid credentials"""
-        login = self.client.login(email='admin@gmail.com', password='admin')
+        login = self.client.login(email='test@gmail.com', password='testpass')
         self.assertTrue(login)
 
     def test_user_login_invalid(self):

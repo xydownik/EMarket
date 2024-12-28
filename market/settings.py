@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c(1(!@1swxo5b1go9pg!)&_y0h6e5(%017m)baho)z$bekmz6+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG  = False
+DEBUG  = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -177,7 +177,7 @@ REST_FRAMEWORK = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'LOCATION': 'redis://redis:6379/1',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }

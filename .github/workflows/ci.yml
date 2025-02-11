@@ -34,7 +34,8 @@ jobs:
           docker-compose up -d
       - name: Run migrations
         run: |
-          docker-compose run django python manage.py migrate
+          docker-compose run django python manage.py makemigrations --noinput
+          docker-compose run django python manage.py migrate --noinput
       - name: Run tests
         run: |
           pytest --cov=.

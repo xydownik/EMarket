@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c(1(!@1swxo5b1go9pg!)&_y0h6e5(%017m)baho)z$bekmz6+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG  = False
+DEBUG  = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -104,9 +104,9 @@ WSGI_APPLICATION = 'market.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(os.getenv('DATABASE_URL', 'postgresql://admin:Bi1QLlMEzVGPz4D7NYqOtjOSGakv2aLE@dpg-culpl4q3esus73d1al2g-a/new_db_s2co')),
+    'default': dj_database_url.parse(os.getenv('DATABASE_URL', 'postgresql://admin:Bi1QLlMEzVGPz4D7NYqOtjOSGakv2aLE@dpg-culpl4q3esus73d1al2g-a.oregon-postgres.render.com/new_db_s2co')),
 
-    'replica2': dj_database_url.parse(os.getenv('DATABASE_URL', 'postgresql://admin:Bi1QLlMEzVGPz4D7NYqOtjOSGakv2aLE@dpg-culpl4q3esus73d1al2g-a/new_db_s2co'))
+    'replica2': dj_database_url.parse(os.getenv('DATABASE_URL', 'postgresql://admin:Bi1QLlMEzVGPz4D7NYqOtjOSGakv2aLE@dpg-culpl4q3esus73d1al2g-a.oregon-postgres.render.com/new_db_s2co'))
 }
 
 AUTHENTICATION_BACKENDS = [
